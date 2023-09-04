@@ -1,0 +1,166 @@
+DOCTYPE html>
+<html>
+<head>
+    <title>Random Code Generator</title>
+    <style>
+        h1 {
+            text-align: center;
+            border-radius: 12px;
+            background: black;
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        th:first-child {
+            border-top-left-radius: 5px;
+        }
+
+        th:last-child {
+            border-top-right-radius: 5px;
+        }
+
+        td:first-child {
+            font-weight: bold;
+        }
+
+        button {
+            display: block;
+            margin: 5px auto;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: block;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button.edit {
+            background-color: #28a745;
+        }
+
+        button.delete {
+            background-color: #dc3545;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Optional: Add some spacing to the top of the table */
+        #codeTableBody tr:first-child th {
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Code Generator with Styled Table</h1>
+   
+    <table>
+        <tbody id="codeTableBody">
+            <tr>
+                <th>S/No.</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Generated Code</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Action</th>
+            </tr>
+
+        </tbody>
+    </table>
+    <button id="addManuallyButton">Add Details</button>
+    <script>
+        let entryCount = 0; // Initialize the entry count
+
+        // Function to handle manual entry button click event
+        document.getElementById('addManuallyButton').addEventListener('click', function () {
+            const email = prompt("Enter Email:");
+            const phoneNumber = prompt("Enter Phone Number:");
+
+            if (email !== null && phoneNumber !== null) {
+                entryCount++; // Increment the entry count
+                const randomCode = generateRandomCode(8); // Change 8 to your desired code length
+                const currentDate = new Date();
+                const date = currentDate.toLocaleDateString();
+                const time = currentDate.toLocaleTimeString();
+
+                const codeTableBody = document.getElementById('codeTableBody');
+                const newRow = codeTableBody.insertRow(-1); // Append a new row at the end
+
+                // Insert cells into the new row
+                const numberCell = newRow.insertCell(0);
+                const emailCell = newRow.insertCell(1);
+                const phoneNumberCell = newRow.insertCell(2);
+                const generatedCodeCell = newRow.insertCell(3);
+                const dateCell = newRow.insertCell(4);
+                const timeCell = newRow.insertCell(5);
+                const actionCell = newRow.insertCell(6);
+
+                // Create Edit and Delete buttons
+                const editButton = document.createElement('button');
+                editButton.textContent = 'Edit';
+                editButton.className = 'edit';
+                editButton.addEventListener('click', function () {
+                    // Add edit functionality here, e.g., prompt to edit email or phone number
+                    const editedEmail = prompt("Edit Email:", emailCell.textContent);
+                    const editedPhoneNumber = prompt("Edit Phone Number:", phoneNumberCell.textContent);
+
+                    if (editedEmail !== null && editedPhoneNumber !== null) {
+                        emailCell.textContent = editedEmail;
+                        phoneNumberCell.textContent = editedPhoneNumber;
+                    }
+                });
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'delete';
+                deleteButton.addEventListener('click', function () {
+                    // Add delete functionality here, e.g., remove the entire row
+                    codeTableBody.removeChild(newRow);
+                });
+
+                // Populate the cells with data
+                numberCell.textContent = entryCount;
+                emailCell.textContent = email;
+                phoneNumberCell.textContent = phoneNumber;
+                generatedCodeCell.textContent = randomCode;
+                dateCell.textContent = date;
+                timeCell.textContent = time;
+
+                // Add buttons to the action cell
+                actionCell.appendChild(editButton);
+                actionCell.appendChild(deleteButton);
+            }
+        });
+
+        // JavaScript function to generate a random code
+        function generateRandomCode(length) {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let code = '';
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                code += characters.charAt(randomIndex);
+            }
+            return code;
+        }
+    </script>
+</body>
+</html>
